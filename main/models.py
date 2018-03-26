@@ -113,6 +113,8 @@ class Carpet(object):
         """
         file_name = f'generated/{generate_uuid()}.svg'
         writeSVG(file_name, (self.polygon,))
+        
+        return file_name
     
     @property
     def polygon(self):

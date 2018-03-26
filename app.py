@@ -73,7 +73,8 @@ def cut_nylon_fits(shop):
         successful = carpet.cut(85, 85)
         if successful:
             carpet.save(shop.objects)
-            carpet.save_image()  # save SVG image in /generated/
+            file_name = carpet.save_image()  # save SVG image in /generated/
+            print(f"Generated carpet image at {file_name}.")
 
 @do_test(header="Adding additional 'nylon' carpets to the inventory:")
 def restock_nylon_5(shop):
