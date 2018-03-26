@@ -1,13 +1,32 @@
 # magikarpet
 Carpet inventory system using [Polygon 3](https://www.j-raedler.de/projects/polygon/) and [MongoDB](https://www.mongodb.com/download-center).
 
+### Carpet Document Schema
+```
+{
+    "_id"          : ObjectId("123456789abcdef"),
+    "carpet_type"  : "wool",
+    "status"       : "new"
+    "dimensions"   : [ [ 0, 100 ],
+                       [ 100, 100 ],
+                       [ 100, 0 ],
+                       [ 0, 0 ],
+                       [ 0, 100 ]
+    ]
+}
+```
+
+### Description
+1. To add a new carpet to the inventory, create a new document with a "status" of "new". You can also specify the "carpet_type". The "dimensions" is an array of point tuples and will default to 100m x 100m.
+2. To cut from a roll of carpet, we need to get the difference of two 2D polygons (p-q). This can be done using [Polygon 3](https://www.j-raedler.de/projects/polygon/). The resulting array of point tuples will then be stored as the new "dimensions" of the document and the "status" will be changed to "cut".
+3. We need to iterate through all the carpets with a "status" of "cut" until we can find one that meets the requirement (e.g. a 85m x 85m rectangle should fit inside the bigger polygon). If there are no "cut" carpets left to choose from, we will then loop through all the "new" carpets. If there are still none, we can call the restock() method.
+
 ### Requirements
 * Python >=3.5.x
 * MongoDB >=3.6.x
 
 ### Recommended
-I recommend installing the following version managers to make your life easier:
-* [pyenv](https://github.com/pyenv/pyenv)
+I recommend installing the [pyenv](https://github.com/pyenv/pyenv) to make your life easier.
 
 ### Running
 ```
@@ -70,21 +89,6 @@ Listing all carpets in inventory:
 - [5ab8c2c1921fdb50b9c16621] new nylon: [[0, 100], [100, 100], [100, 0], [0, 0], [0, 100]]
 - [5ab8c2c1921fdb50b9c16622] new nylon: [[0, 100], [100, 100], [100, 0], [0, 0], [0, 100]]
 ----------------------------------------------------------------------------------------------------
-```
-
-### Carpet Document Schema
-```
-{
-    "_id"          : ObjectId("123456789abcdef"),
-    "carpet_type"  : "wool",
-    "status"       : "new"
-    "dimensions"   : [ [ 0, 100 ],
-                       [ 100, 100 ],
-                       [ 100, 0 ],
-                       [ 0, 0 ],
-                       [ 0, 100 ]
-    ]
-}
 ```
 
 ### Things To Do
